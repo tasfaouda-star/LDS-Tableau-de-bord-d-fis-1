@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tableau de bord — Risque de décrochage scolaire | Burkina Faso</title>
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--ink:#172033;--muted:#687386;--line:#e5e9f0;--navy:#14243b;--teal:#239b8e;--yellow:#e9bd59;--orange:#e78325;--red:#c43b2d;--green:#83bfa0;--shadow:0 8px 24px #1720330b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+header{background:linear-gradient(120deg,#14243b,#203b5a);color:#fff;padding:28px max(22px,calc((100% - 1440px)/2)) 24px}
+.eyebrow{text-transform:uppercase;letter-spacing:.13em;font-size:11px;color:#a9c4d9;font-weight:700}
+h1{font-size:clamp(23px,3vw,34px);line-height:1.15;margin:7px 0 8px;letter-spacing:-.03em}
+header p{color:#d2deea;margin:0;max-width:850px}
+.wrap{max-width:1440px;margin:auto;padding:22px}
+.toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}.tabs button,.action{border:1px solid var(--line);background:#fff;color:var(--muted);padding:9px 13px;border-radius:9px;cursor:pointer;font-weight:650}
+.tabs button.active{background:var(--navy);border-color:var(--navy);color:#fff}
+.action{color:var(--navy)}button:hover{filter:brightness(.97)}
+.filters{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.filters label{font-size:12px;color:var(--muted);font-weight:650}
+select{border:1px solid var(--line);background:#fff;padding:9px 12px;border-radius:9px;color:var(--ink)}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:15px}
+.card,.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.kpi{padding:16px 18px}.kpi .label{color:var(--muted);font-size:12px;font-weight:650}.kpi .value{font-size:28px;font-weight:800;letter-spacing:-.04em;margin:4px 0}.kpi .hint{color:var(--muted);font-size:11px}
+.layout{display:grid;grid-template-columns:1.1fr .9fr;gap:15px;margin-bottom:15px}
+.card{padding:18px;min-width:0}.card h2{font-size:16px;margin:0 0 4px;letter-spacing:-.02em}.sub{font-size:12px;color:var(--muted);margin:0 0 13px}
+.chart{width:100%;height:auto;display:block;overflow:visible}.legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:11px;margin-top:8px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px}
+.full{margin-bottom:15px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;white-space:nowrap;font-size:12px}th,td{padding:10px 9px;border-bottom:1px solid var(--line);text-align:left}th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em;background:#fafbfd;position:sticky;top:0}tbody tr{cursor:pointer}tbody tr:hover{background:#f5f8fb}tbody tr.selected{background:#edf4fa}
+.pill{display:inline-block;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:800}.crit{background:#fde9e6;color:#a72d21}.high{background:#fff0e1;color:#a95b12}.mod{background:#fff6d9;color:#88630b}.low{background:#e5f4ef;color:#187b6e}
+.detail{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:12px 0}.detail div{background:#f6f8fb;border-radius:9px;padding:10px}.detail b{display:block;font-size:18px}.detail small{color:var(--muted)}
+.note{border-left:3px solid var(--yellow);padding:10px 12px;background:#fffaf0;border-radius:0 8px 8px 0;color:#70561c;font-size:12px;margin-top:12px}
+.panel{display:none}.panel.active{display:block}
+.heat{display:grid;grid-template-columns:150px repeat(10,minmax(27px,1fr));gap:3px;align-items:center;min-width:650px}
+.heat .yr,.heat .reg{font-size:10px;color:var(--muted);text-align:center;padding:5px 0}.heat .reg{text-align:right;padding-right:9px;font-weight:650;font-size:11px}
+.cell{height:29px;border-radius:4px;display:grid;place-items:center;font-size:11px;font-weight:800;color:#172033}
+.footer{color:var(--muted);font-size:11px;padding:5px 2px 20px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.wrap{padding:13px}.kpis{gap:8px}.kpi{padding:12px}.kpi .value{font-size:23px}.detail{grid-template-columns:repeat(2,1fr)}header{padding:22px 16px}}
+@media print{body{background:#fff}.tabs,.filters,.action{display:none}.card,.kpi{box-shadow:none;break-inside:avoid}}
+</style>
+</head>
+<body>
+<header>
+ <div class="eyebrow">Pilotage éducatif · Burkina Faso · 13 régions</div>
+ <h1>Risque de décrochage scolaire</h1>
+ <p>Tableau de bord d’aide à la décision — tendances 2016–2025, indice composite régional et anticipation du risque élevé en 2026.</p>
+</header>
+<div class="wrap">
+ <div class="toolbar">
+  <nav class="tabs" aria-label="Sections">
+   <button class="active" data-tab="synthese">Synthèse décisionnelle</button>
+   <button data-tab="historique">Historique 2016–2025</button>
+   <button data-tab="dimensions">Facteurs de risque</button>
+   <button data-tab="donnees">Données & méthode</button>
+  </nav>
+  <div class="filters">
+   <label for="regionSelect">Région sélectionnée</label>
+   <select id="regionSelect"><option value="">Toutes les régions</option></select>
+   <button class="action" onclick="window.print()">Imprimer / PDF</button>
+  </div>
+ </div>
+
+ <section class="panel active" id="synthese">
+  <div class="kpis" id="kpis"></div>
+  <div class="layout">
+   <article class="card"><h2>Indice composite de risque</h2><p class="sub">Classement régional, échelle de 0 à 100</p><div id="ranking"></div></article>
+   <article class="card"><h2>Probabilité de risque élevé en 2026</h2><p class="sub">Modèle probit ordinal — seuils indicatifs : vigilance 0,33 ; alerte 0,50</p><div id="forecast"></div><div class="legend"><span><i class="dot" style="background:var(--red)"></i>Alerte</span><span><i class="dot" style="background:var(--yellow)"></i>Vigilance</span><span><i class="dot" style="background:var(--teal)"></i>Normal</span></div></article>
+  </div>
+  <article class="card full"><h2>Fiche régionale</h2><p class="sub">Sélectionnez une région dans le filtre ou dans le classement.</p><div id="regionDetail"></div></article>
+  <article class="card full"><h2>Tableau de priorisation</h2><p class="sub">Classement par indice composite décroissant ; cliquer sur une ligne pour consulter la région.</p><div class="table-wrap" id="regionTable"></div></article>
+ </section>
+
+ <section class="panel" id="historique">
+  <article class="card full"><h2>Évolution des classes de risque par région</h2><p class="sub">F = faible · M = moyen · E = élevé. Chaque cellule représente une année.</p><div class="table-wrap" id="heatmap"></div><div class="legend"><span><i class="dot" style="background:#83bfa0"></i>Faible</span><span><i class="dot" style="background:#f0cf78"></i>Moyen</span><span><i class="dot" style="background:#c43b2d"></i>Élevé</span></div></article>
+  <div class="layout">
+   <article class="card"><h2>Nombre d’années par classe</h2><p class="sub">Sur la période 2016–2025</p><div id="classCounts"></div></article>
+   <article class="card"><h2>Lecture des trajectoires</h2><p class="sub">Principaux signaux à surveiller</p><div id="trajectoryNotes"></div></article>
+  </div>
+ </section>
+
+ <section class="panel" id="dimensions">
+  <div class="layout">
+   <article class="card"><h2>Profil de risque par dimension</h2><p class="sub">Scores standardisés (z) : une valeur positive signale un risque supérieur à la moyenne régionale.</p><div id="profile"></div></article>
+   <article class="card"><h2>Dimensions intégrées à l’indice</h2><p class="sub">Quatre composantes disponibles dans les résultats transmis.</p>
+    <ul style="padding-left:18px;color:var(--muted);font-size:13px;line-height:1.9">
+     <li><b>Risque éducatif 2025</b> — niveau récent du risque scolaire.</li>
+     <li><b>Risque anticipé 2026</b> — moyenne des probabilités des modèles.</li>
+     <li><b>Pauvreté (EHCVM)</b> — contexte socio-économique régional.</li>
+     <li><b>Fermetures / déficit d’offre</b> — indicateur de pression sur l’offre scolaire.</li>
+    </ul>
+    <div class="note">Les scores z sont relatifs aux 13 régions : ils servent à comparer les profils, pas à mesurer une prévalence absolue.</div>
+   </article>
+  </div>
+  <article class="card full"><h2>Valeurs détaillées par région</h2><p class="sub">Données des quatre dimensions visibles dans les graphiques fournis.</p><div class="table-wrap" id="dimensionTable"></div></article>
+ </section>
+
+ <section class="panel" id="donnees">
+  <div class="layout">
+   <article class="card"><h2>Repères méthodologiques</h2>
+    <ul style="padding-left:18px;color:var(--muted);font-size:13px;line-height:1.9">
+     <li>Panel régional : 13 régions, 2016–2025.</li>
+     <li>Apprentissage du modèle : 2017–2023.</li>
+     <li>Test temporel : 2024–2025.</li>
+     <li>Prévision : probit ordinal ; logit présenté comme test de robustesse.</li>
+     <li>Indice composite : échelle 0–100, classement relatif entre régions.</li>
+    </ul>
+   </article>
+   <article class="card"><h2>Limites à garder en tête</h2>
+    <ul style="padding-left:18px;color:var(--muted);font-size:13px;line-height:1.9">
+     <li>Les résultats sont des signaux de priorisation, pas des certitudes individuelles.</li>
+     <li>Les données ST-ESU sur les écoles fermées ne sont pas intégrées : un indicateur de repli du panel est utilisé.</li>
+     <li>Les variables EHCVM enrichissent l’indice et les profils, mais n’améliorent pas la prévision du modèle.</li>
+     <li>Le modèle ne surpasse pas nettement la persistance historique.</li>
+    </ul>
+   </article>
+  </div>
+  <article class="card full"><h2>Sources et statut des données</h2><p class="sub">Sources décrites dans le dossier d’analyse transmis.</p><div class="table-wrap"><table><thead><tr><th>Source</th><th>Statut</th><th>Usage / remarque</th></tr></thead><tbody>
+   <tr><td>Panel primaire et préscolaire 2016–2025</td><td><span class="pill low">Intégrée</span></td><td>Construction du label, prédicteurs et validation</td></tr>
+   <tr><td>EHCVM 2021 / 2022</td><td><span class="pill low">Intégrée</span></td><td>Indice de pauvreté et profils régionaux</td></tr>
+   <tr><td>Rapports ST-ESU — écoles fermées</td><td><span class="pill mod">À compléter</span></td><td>Indicateur de repli du panel utilisé</td></tr>
+   <tr><td>PDI par région, EDS 2021, abandon/redoublement, annuaires provinciaux, transition post-primaire</td><td><span class="pill mod">Non intégrées</span></td><td>À ajouter lorsque les sources seront disponibles</td></tr>
+  </tbody></table></div>
+ </article>
+ </section>
+ <div class="footer">Lecture : l’indice composite classe les régions entre elles ; il ne mesure pas un niveau absolu de décrochage. Prévisions 2026 à utiliser comme outil d’aide à la décision, à confronter aux données administratives et au contexte local.</div>
+</div>
+<script>
+const years=[2016,2017,2018,2019,2020,2021,2022,2023,2024,2025];
+const rows=[
+["SAHEL","Sahel","E","EEEEEEEEEE",100,1.000,.000,[1.6,1.5,1.8,2.4]],
+["CENTRE-NORD","Centre-Nord","E","EEEEEEEEEE",68.3,.997,.994,[1.3,1.2,.1,.7]],
+["EST","Est","E","EEMEMEEEEE",78.8,.999,.996,[1.2,1.4,.5,1.5]],
+["NORD","Nord","E","MMMEEEEEEE",66,.952,.956,[.8,1.2,1.4,-.4]],
+["BOUCLE DU MOUHOUN","Boucle du Mouhoun","E","MMMMEMMEEE",58.2,.439,.476,[.4,.4,.6,.6]],
+["SUD-OUEST","Sud-Ouest","M","MMEEMMMMMM",28.1,.016,.029,[-.4,-.8,-.1,-.6]],
+["CENTRE-EST","Centre-Est","M","MFFFFMMEEM",36,.354,.358,[.1,.1,-.8,-.3]],
+["CASCADES","Cascades","M","FMMMMMFFMM",25.4,.179,.194,[-.3,-.4,-.8,-.6]],
+["PLATEAU CENTRAL","Plateau Central","M","MFFMFM MMMM".replaceAll(" ",""),27.2,.037,.050,[-.4,-.8,-.1,-.7]],
+["HAUTS-BASSINS","Hauts-Bassins","F","MFM MMFFMFF".replaceAll(" ",""),21.3,.002,.006,[-.7,-.9,-.5,-.5]],
+["CENTRE-OUEST","Centre-Ouest","F","FFFMFFFFFF",22.6,.000,.001,[-.8,-.9,-.1,-.7]],
+["CENTRE-SUD","Centre-Sud","F","FFFFFFFFFF",21.2,.000,.000,[-1.1,-.9,.1,-.7]],
+["CENTRE","Centre","F","FFFFFFFFFF",0,.000,.000,[-1.7,-.9,-2.1,-.7]]
+];
+// Exact probit/logit values transcribed from the analysis console output.
+const dimNames=["Risque éducatif 2025","Risque anticipé 2026","Pauvreté (EHCVM)","Fermetures d’écoles"];
+const colors={E:"#c43b2d",M:"#f0cf78",F:"#83bfa0"};
+const alertClass=p=>p>=.5?"ALERTE":p>=.33?"Vigilance":"Normal";
+const alertColor=p=>p>=.5?"#c43b2d":p>=.33?"#e9bd59":"#239b8e";
+const fmt=(n,d=1)=>Number(n).toFixed(d).replace(".",",");
+const byId=id=>rows.find(r=>r[0]===id);
+const selected=()=>document.getElementById("regionSelect").value;
+function svgBars(data,maxW=430){let h=24,top=4,left=130,w=maxW-left-40;return `<svg class="chart" viewBox="0 0 ${maxW} ${data.length*31+10}" role="img">${data.map((d,i)=>{let y=top+i*31;return `<text x="${left-8}" y="${y+15}" text-anchor="end" font-size="10" fill="#687386">${d[0]}</text><rect x="${left}" y="${y}" width="${w}" height="17" rx="4" fill="#eef1f5"/><rect x="${left}" y="${y}" width="${Math.max(1,w*d[1])}" height="17" rx="4" fill="${d[2]}"/><text x="${left+w*d[1]+5}" y="${y+13}" font-size="10" fill="#172033">${d[3]}</text>`}).join("")}</svg>`}
+function render(){
+ const id=selected(), chosen=id?rows.filter(r=>r[0]===id):rows;
+ const alerts=rows.filter(r=>r[5]>=.5).length, watch=rows.filter(r=>r[5]>=.33&&r[5]<.5).length;
+ document.getElementById("kpis").innerHTML=[
+  ["Régions en alerte",alerts,"P(risque élevé) ≥ 0,50"],
+  ["Régions en vigilance",watch,"0,33 ≤ P(risque élevé) < 0,50"],
+  ["Indice maximal", "100 / 100","Sahel"],
+  ["Période observée","2016–2025","10 années · 13 régions"]
+ ].map(x=>`<div class="kpi"><div class="label">${x[0]}</div><div class="value">${x[1]}</div><div class="hint">${x[2]}</div></div>`).join("");
+ const rank=[...chosen].sort((a,b)=>b[4]-a[4]);
+ document.getElementById("ranking").innerHTML=svgBars(rank.map(r=>[r[1],r[4]/100,r[4]>=65?"#c43b2d":r[4]>=35?"#e78325":r[4]>=25?"#e9bd59":"#239b8e",fmt(r[4])]),500);
+ document.getElementById("forecast").innerHTML=svgBars([...chosen].sort((a,b)=>b[5]-a[5]).map(r=>[r[1],r[5],alertColor(r[5]),fmt(r[5]*100,1)+" %"]),500);
+ const focus=id?byId(id):byId("SAHEL");
+ const classCounts={E:0,M:0,F:0};[...focus[3]].forEach(c=>classCounts[c]++);
+ document.getElementById("regionDetail").innerHTML=`<div class="detail"><div><small>Indice composite</small><b>${fmt(focus[4])}/100</b></div><div><small>Probabilité 2026 (probit)</small><b>${fmt(focus[5]*100,1)} %</b></div><div><small>Robustesse (logit)</small><b>${fmt(focus[6]*100,1)} %</b></div><div><small>Classe 2025</small><b>${focus[2]==="E"?"Élevé":focus[2]==="M"?"Moyen":"Faible"}</b></div></div><p style="margin:4px 0;color:#687386;font-size:12px">${focus[1]} — répartition 2016–2025 : ${classCounts.E} année(s) à risque élevé, ${classCounts.M} moyenne(s), ${classCounts.F} faible(s).</p><div class="note">${focus[5]>=.5?"Priorité d’intervention : renforcer le suivi régional, cibler les zones et établissements les plus exposés et vérifier les signaux administratifs.":focus[5]>=.33?"Surveillance rapprochée : approfondir le diagnostic local et suivre l’évolution des indicateurs scolaires.":"Maintenir la prévention et surveiller les éventuels signaux de dégradation."}</div>`;
+ document.getElementById("regionTable").innerHTML=`<table><thead><tr><th>Rang</th><th>Région</th><th>Indice /100</th><th>Probit 2026</th><th>Logit 2026</th><th>Classe 2025</th><th>Alerte</th></tr></thead><tbody>${rank.map((r,i)=>`<tr data-id="${r[0]}" class="${id===r[0]?"selected":""}"><td>${i+1}</td><td><b>${r[1]}</b></td><td>${fmt(r[4])}</td><td>${fmt(r[5]*100,1)} %</td><td>${fmt(r[6]*100,1)} %</td><td>${r[2]==="E"?"Élevé":r[2]==="M"?"Moyen":"Faible"}</td><td><span class="pill ${r[5]>=.5?"crit":r[5]>=.33?"mod":"low"}">${alertClass(r[5])}</span></td></tr>`).join("")}</tbody></table>`;
+ document.querySelectorAll("#regionTable tr[data-id]").forEach(tr=>tr.addEventListener("click",()=>{document.getElementById("regionSelect").value=tr.dataset.id;render()}));
+ const ordered=id?chosen:rows;
+ document.getElementById("heatmap").innerHTML=`<div class="heat"><div></div>${years.map(y=>`<div class="yr">${y}</div>`).join("")}${ordered.map(r=>`<div class="reg">${r[1]}</div>${[...r[3]].map(c=>`<div class="cell" style="background:${colors[c]}">${c}</div>`).join("")}`).join("")}</div>`;
+ document.getElementById("classCounts").innerHTML=svgBars(ordered.map(r=>{let n=[...r[3]].filter(c=>c==="E").length;return[r[1],n/10,n>=7?"#c43b2d":"#e9bd59",n+" / 10"]}),500);
+ document.getElementById("trajectoryNotes").innerHTML=`<p><b>Risque durablement élevé :</b> Sahel, Centre-Nord et Est affichent une classe élevée sur les dix années. Le Nord bascule vers un niveau élevé à partir de 2019.</p><p><b>Dégradation récente :</b> Boucle du Mouhoun connaît une hausse marquée en fin de période.</p><p><b>Profils plus favorables :</b> Centre, Centre-Sud et Centre-Ouest restent majoritairement en classe faible.</p>`;
+ document.getElementById("profile").innerHTML=`<div class="table-wrap"><table><thead><tr><th>Région</th>${dimNames.map(n=>`<th>${n}</th>`).join("")}</tr></thead><tbody>${ordered.map(r=>`<tr><td>${r[1]}</td>${r[7].map(v=>`<td style="font-weight:700;color:${v>1?"#b2382d":v<-.7?"#168879":"#596579"}">${fmt(v,1)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+ document.getElementById("dimensionTable").innerHTML=`<table><thead><tr><th>Région</th>${dimNames.map(n=>`<th>${n}</th>`).join("")}</tr></thead><tbody>${ordered.map(r=>`<tr><td>${r[1]}</td>${r[7].map(v=>`<td>${fmt(v,1)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+}
+const sel=document.getElementById("regionSelect");
+rows.forEach(r=>{let o=document.createElement("option");o.value=r[0];o.textContent=r[1];sel.appendChild(o)});
+sel.addEventListener("change",render);
+document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("active",x.id===b.dataset.tab))}));
+render();
+</script>
+</body></html>
